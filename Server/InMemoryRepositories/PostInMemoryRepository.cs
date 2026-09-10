@@ -8,6 +8,32 @@ public class PostInMemoryRepository : IPostRepository
 {
     private readonly List<Post> posts = new();
     
+    public PostInMemoryRepository()
+    {
+        posts.Add(new Post
+        {
+            Id = 1,
+            Title = "Welcome",
+            Body = "Welcome to our forum!",
+            UserId = 1
+        });
+
+        posts.Add(new Post
+        {
+            Id = 2,
+            Title = "My First Post",
+            Body = "This is my first post.",
+            UserId = 2
+        });
+
+        posts.Add(new Post
+        {
+            Id = 3,
+            Title = "Hello Everyone",
+            Body = "Nice to meet everyone!",
+            UserId = 3
+        });
+    }
     public Task<Post> AddAsync(Post post)
     {
         post.Id = posts.Any()

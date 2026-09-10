@@ -7,6 +7,32 @@ public class CommentInMemoryRepository : ICommentRepository
 {
     private readonly List<Comment> comments = new();
 
+    public CommentInMemoryRepository()
+    {
+        comments.Add(new Comment
+        {
+            Id = 1,
+            Body = "Nice post!",
+            UserId = 2,
+            PostId = 1
+        });
+
+        comments.Add(new Comment
+        {
+            Id = 2,
+            Body = "Good luck with the assignment!",
+            UserId = 3,
+            PostId = 2
+        });
+
+        comments.Add(new Comment
+        {
+            Id = 3,
+            Body = "Hello!",
+            UserId = 1,
+            PostId = 3
+        });
+    }
     public Task<Comment> AddAsync(Comment comment)
     {
         comment.Id = comments.Any()
