@@ -1,0 +1,162 @@
+@WebAPI_HostAddress = http://localhost:5015
+
+### Get all users
+GET {{WebAPI_HostAddress}}/Users
+Accept: application/json
+
+###
+
+### Create a user
+POST {{WebAPI_HostAddress}}/Users
+Content-Type: application/json
+
+{
+  "userName": "Esmita",
+  "password": "1234"
+}
+
+###
+
+### Create a post
+POST {{WebAPI_HostAddress}}/Posts
+Content-Type: application/json
+
+{
+  "title": "My First Post",
+  "body": "Hello from my Web API!",
+  "userId": 1
+}
+
+###
+
+### Get all posts
+GET {{WebAPI_HostAddress}}/Posts
+Accept: application/json
+
+###
+
+### Get specific post
+GET {{WebAPI_HostAddress}}/Posts/1
+Accept: application/json
+
+###
+
+### Create a comment
+POST {{WebAPI_HostAddress}}/Comments
+Content-Type: application/json
+
+{
+  "body": "Nice post!",
+  "userId": 1,
+  "postId": 1
+}
+
+###
+
+### Get all comments
+GET {{WebAPI_HostAddress}}/Comments
+Accept: application/json
+
+###
+
+### Get specific comment
+GET {{WebAPI_HostAddress}}/Comments/1
+Accept: application/json
+
+###
+
+### Get specific user
+GET {{WebAPI_HostAddress}}/Users/1
+Accept: application/json
+
+###
+
+### Update user
+PUT {{WebAPI_HostAddress}}/Users/1
+Content-Type: application/json
+
+{
+  "userName": "EsmitaUpdated",
+  "password": "1234"
+}
+
+###
+
+### Delete user
+DELETE {{WebAPI_HostAddress}}/Users/1
+
+###
+
+### Update post
+PUT {{WebAPI_HostAddress}}/Posts/1
+Content-Type: application/json
+
+{
+  "title": "My Updated Post",
+  "body": "This post has been updated.",
+  "userId": 1
+}
+
+###
+
+### Delete post
+DELETE {{WebAPI_HostAddress}}/Posts/1
+
+###
+
+### Update comment
+PUT {{WebAPI_HostAddress}}/Comments/1
+Content-Type: application/json
+
+{
+  "body": "Updated comment!",
+  "userId": 1,
+  "postId": 1
+}
+
+###
+
+### Delete comment
+DELETE {{WebAPI_HostAddress}}/Comments/1
+
+###
+
+### Filter users by username
+GET {{WebAPI_HostAddress}}/Users?userName=Esm
+Accept: application/json
+
+###
+
+### Filter posts by title
+GET {{WebAPI_HostAddress}}/Posts?title=First
+Accept: application/json
+
+###
+
+### Filter posts by user ID
+GET {{WebAPI_HostAddress}}/Posts?userId=1
+Accept: application/json
+
+###
+
+### Filter posts by username
+GET {{WebAPI_HostAddress}}/Posts?userName=Esm
+Accept: application/json
+
+###
+
+### Filter comments by user ID
+GET {{WebAPI_HostAddress}}/Comments?userId=1
+Accept: application/json
+
+###
+
+### Filter comments by username
+GET {{WebAPI_HostAddress}}/Comments?userName=Esm
+Accept: application/json
+
+###
+
+### Filter comments by post ID
+GET {{WebAPI_HostAddress}}/Comments?postId=1
+Accept: application/json
