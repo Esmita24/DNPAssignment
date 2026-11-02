@@ -1,0 +1,48 @@
+﻿@page "/view-posts"
+@rendermode InteractiveServer
+@using ApiContracts
+@inject BlazorApp.Services.IPostService PostService
+
+<h3>All Posts</h3>
+
+@if (posts == null)
+{
+    <p>Loading posts...</p>
+}
+else if (posts.Count == 0)
+{
+    <p>No posts found.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Body</th>
+            <th>User ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var post in posts)
+        {
+            <tr>
+                <td>@post.Id</td>
+                <td>@post.Title</td>
+                <td>@post.Body</td>
+                <td>@post.UserId</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<PostDto>? posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await PostService.GetPostsAsync();
+    }
+}

@@ -1,0 +1,63 @@
+﻿@page "/add-post"
+@rendermode InteractiveServer
+@using ApiContracts
+@inject BlazorApp.Services.IPostService PostService
+
+<h3>Add New Post</h3>
+
+<div>
+    <label>Title:</label>
+    <input @bind="title" />
+</div>
+
+<br />
+
+<div>
+    <label>Body:</label>
+    <textarea @bind="body"></textarea>
+</div>
+
+<br />
+
+<div>
+    <label>User ID:</label>
+    <input type="number" @bind="userId" />
+</div>
+
+<br />
+
+<button @onclick="CreatePost">Create Post</button>
+
+<p>@message</p>
+
+@code {
+    private string title = "";
+    private string body = "";
+    private int userId = 1;
+    private string message = "";
+
+    private async Task CreatePost()
+    {
+        try
+        {
+            var request = new CreatePostDto
+            {
+                Title = title,
+                Body = body,
+                UserId = userId
+            };
+
+            await PostService.AddPostAsync(request);
+
+            message = "Post created successfully!";
+
+            title = "";
+            body = "";
+            userId = 1;
+        }
+        catch (Exception ex)
+        {
+            message = "Error: " + ex.Message;
+        }
+    }
+}

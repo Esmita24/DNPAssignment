@@ -1,0 +1,66 @@
+﻿@page "/add-comment"
+@rendermode InteractiveServer
+@using ApiContracts
+@inject BlazorApp.Services.ICommentService CommentService
+
+<h3>Add New Comment</h3>
+
+<div>
+    <label>Comment:</label>
+    <textarea @bind="body"></textarea>
+</div>
+
+<br />
+
+<div>
+    <label>User ID:</label>
+    <input type="number" @bind="userId" />
+</div>
+
+<br />
+
+<div>
+    <label>Post ID:</label>
+    <input type="number" @bind="postId" />
+</div>
+
+<br />
+
+<button @onclick="CreateComment">Add Comment</button>
+
+<p>@message</p>
+
+@code {
+    private string body = "";
+    private int userId = 1;
+    private int postId = 1;
+    private string message = "";
+
+    private async Task CreateComment()
+    {
+        if (string.IsNullOrWhiteSpace(body))
+        {
+            message = "Please enter a comment.";
+            return;
+        }
+
+        try
+        {
+            var request = new CreateCommentDto
+            {
+                Body = body,
+                UserId = userId,
+                PostId = postId
+            };
+
+            await CommentService.AddCommentAsync(request);
+
+            message = "Comment added successfully!";
+            body = "";
+        }
+        catch (Exception ex)
+        {
+            message = "Error: " + ex.Message;
+        }
+    }
+}

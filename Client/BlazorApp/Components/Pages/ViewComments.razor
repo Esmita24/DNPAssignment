@@ -1,0 +1,62 @@
+﻿@page "/view-comments"
+@rendermode InteractiveServer
+@using ApiContracts
+@inject BlazorApp.Services.ICommentService CommentService
+
+<h3>All Comments</h3>
+
+@if (comments == null)
+{
+    <p>Loading comments...</p>
+}
+else if (comments.Count == 0)
+{
+    <p>No comments found.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Comment</th>
+            <th>User ID</th>
+            <th>Post ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var comment in comments)
+        {
+            <tr>
+                <td>@comment.Id</td>
+                <td>@comment.Body</td>
+                <td>@comment.UserId</td>
+                <td>@comment.PostId</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<CommentDto>? comments;
+    private string errorMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            comments = await CommentService.GetCommentsAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+            comments = new List<CommentDto>();
+        }
+    }
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p class="text-danger">@errorMessage</p>
+}
