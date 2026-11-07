@@ -1,43 +1,85 @@
-﻿@page "/add-post"
+﻿@attribute [Authorize]
+@page "/add-post"
 @rendermode InteractiveServer
 @using ApiContracts
-@inject BlazorApp.Services.IPostService PostService
+@using BlazorApp.Services
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@inject IPostService PostService
+@inject AuthenticationStateProvider AuthProvider
 
 <h3>Add New Post</h3>
 
-<div>
-    <label>Title:</label>
-    <input @bind="title" />
-</div>
+@if (!authLoaded)
+{
+    <p>Checking login...</p>
+}
+else if (userId == 0)
+{
+    <p>Please log in before creating a post.</p>
+    <a href="/login">Go to Login</a>
+}
+else
+{
+    <p>Posting as: @userName</p>
 
-<br />
+    <div>
+        <label>Title:</label>
+        <input @bind="title" />
+    </div>
 
-<div>
-    <label>Body:</label>
-    <textarea @bind="body"></textarea>
-</div>
+    <br />
 
-<br />
+    <div>
+        <label>Body:</label>
+        <textarea @bind="body"></textarea>
+    </div>
 
-<div>
-    <label>User ID:</label>
-    <input type="number" @bind="userId" />
-</div>
+    <br />
 
-<br />
-
-<button @onclick="CreatePost">Create Post</button>
+    <button @onclick="CreatePost">Create Post</button>
+}
 
 <p>@message</p>
 
 @code {
     private string title = "";
     private string body = "";
-    private int userId = 1;
     private string message = "";
+
+    private int userId = 0;
+    private string userName = "";
+    private bool authLoaded = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var authState = await AuthProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity?.IsAuthenticated == true)
+            {
+                userName = user.Identity.Name ?? "";
+
+                int.TryParse(
+                    user.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+                    out userId);
+            }
+
+            authLoaded = true;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
 
     private async Task CreatePost()
     {
+        if (userId == 0)
+        {
+            message = "Please log in first.";
+            return;
+        }
+
         try
         {
             var request = new CreatePostDto
@@ -53,7 +95,6 @@
 
             title = "";
             body = "";
-            userId = 1;
         }
         catch (Exception ex)
         {
